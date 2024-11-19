@@ -10,9 +10,9 @@ public:
         return instance;
     }
 
-    int BufferSize = 1000000;
-    std::string ClientHost = "64.226.68.205";
-    int ClientPort = 443;
+    const int BufferSize = 1000000;
+    const std::string ClientHost = "64.226.68.205";
+    const int ClientPort = 443;
     const char* encKey = "RVsYtI+ZE5hrcKWxyBFv5MGMn5svmJ5oIz10D1/OC+w=";
 
 private:

@@ -49,3 +49,12 @@
 [Tue Nov 19 23:04:19 2024] TestMessageServer sent successfully
 [Tue Nov 19 23:04:19 2024] Socket closed successfully
 [Tue Nov 19 23:04:19 2024] WinSock cleaned up
+[Tue Nov 19 23:19:47 2024] WinSock initialized successfully
+[Tue Nov 19 23:19:47 2024] Socket created successfully
+[Tue Nov 19 23:19:47 2024] Connected to server successfully
+[Tue Nov 19 23:19:47 2024] Sending Ping...
+[Tue Nov 19 23:19:47 2024] Ping sent successfully
+[Tue Nov 19 23:19:47 2024] Sending TestMessageServer...
+[Tue Nov 19 23:19:47 2024] TestMessageServer sent successfully
+[Tue Nov 19 23:19:47 2024] Socket closed successfully
+[Tue Nov 19 23:19:47 2024] WinSock cleaned up

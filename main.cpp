@@ -15,7 +15,7 @@ void PrintErrorMessage(const char* msg) {
     char buffer[256];
     sprintf_s(buffer, "Error: %s. Code: %lu\n", msg, err);
     OutputDebugStringA(buffer); // Выводит в окно отладки
-    std::cerr << buffer;        // Выводит в консоль
+    printf("%s", buffer);       // Выводит в консоль
 }
 
 // Функция для записи в лог (в файл и в консоль)
@@ -29,17 +29,21 @@ void LogMessage(const char* message) {
     timestamp[strcspn(timestamp, "\n")] = '\0';
 
     // Формируем полное сообщение
-    std::string fullMessage = "[" + std::string(timestamp) + "] " + message;
+    char fullMessage[512];
+    strcpy_s(fullMessage, "[");
+    strcat_s(fullMessage, timestamp);
+    strcat_s(fullMessage, "] ");
+    strcat_s(fullMessage, message);
 
     // Записываем в файл
-    std::ofstream logFile("connection.log", std::ios::app);
-    if (logFile.is_open()) {
-        logFile << fullMessage << std::endl;
+    FILE* logFile;
+    if (fopen_s(&logFile, "connection.log", "a") == 0) {
+        fprintf(logFile, "%s\n", fullMessage);
+        fclose(logFile);
     }
-    logFile.close();
 
     // Выводим в консоль
-    std::cout << fullMessage << std::endl;
+    printf("%s\n", fullMessage);
 }
 
 // Функция для отправки сообщения типа "TestMessageServer"
@@ -87,7 +91,7 @@ int main() {
     sockaddr_in serverAddr = {};
     serverAddr.sin_family = AF_INET;
     serverAddr.sin_port = htons(config.ClientPort); // Используем порт из Config
-    inet_pton(AF_INET, config.ClientHost.c_str(), &serverAddr.sin_addr); // Используем хост из Config
+    inet_pton(AF_INET, config.ClientHost, &serverAddr.sin_addr); // Используем хост из Config
 
     if (connect(clientSocket, (struct sockaddr*)&serverAddr, sizeof(serverAddr)) == SOCKET_ERROR) {
         LogMessage("Connection failed");

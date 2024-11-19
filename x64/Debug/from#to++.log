@@ -1,4 +1,2 @@
-﻿  main.cpp
-C:\Users\Super PC\Downloads\from(35,12): warning C4101: len: неиспользованная локальная переменная
-C:\Users\Super PC\Downloads\from(52,22): warning C4244: инициализация: преобразование "SOCKET" в "int", возможна потеря данных
+﻿  Utilities.cpp
   from#to++.vcxproj -> C:\Users\Super PC\Downloads\from#to++\x64\Debug\from#to++.exe

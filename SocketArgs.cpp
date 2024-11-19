@@ -6,7 +6,7 @@
 
 class Utilities {
 public:
-    static std::vector<std::string> SplitJSON(const std::string& input);
+    //static std::vector<std::string> SplitJSON(const std::string& input);
 };
 
 #endif

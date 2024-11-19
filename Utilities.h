@@ -1,12 +1,10 @@
-#ifndef UTILITIES_HPP
-#define UTILITIES_HPP
-
-#include <string>
-#include <vector>
+#ifndef UTILITIES_H
+#define UTILITIES_H
 
 class Utilities {
 public:
-    static std::vector<std::string> SplitJSON(const std::string& input);
+    static char** SplitJSON(const char* input, unsigned int& messageCount);
+    static void FreeMessages(char** messages, unsigned int messageCount);
 };
 
-#endif
+#endif // UTILITIES_H

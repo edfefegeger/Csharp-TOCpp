@@ -14,19 +14,32 @@ void PrintErrorMessage(const char* msg) {
     DWORD err = WSAGetLastError();
     char buffer[256];
     sprintf_s(buffer, "Error: %s. Code: %lu\n", msg, err);
-    OutputDebugStringA(buffer); // Выводит в окно отладки, вместо std::cerr
+    OutputDebugStringA(buffer); // Выводит в окно отладки
+    std::cerr << buffer;        // Выводит в консоль
 }
 
-// Функция для записи в лог
+// Функция для записи в лог (в файл и в консоль)
 void LogMessage(const char* message) {
+    // Получаем текущее время
+    time_t now = time(0);
+    char timestamp[26];
+    ctime_s(timestamp, sizeof(timestamp), &now);
+
+    // Удаляем символ новой строки из timestamp
+    timestamp[strcspn(timestamp, "\n")] = '\0';
+
+    // Формируем полное сообщение
+    std::string fullMessage = "[" + std::string(timestamp) + "] " + message;
+
+    // Записываем в файл
     std::ofstream logFile("connection.log", std::ios::app);
     if (logFile.is_open()) {
-        time_t now = time(0);
-        char timestamp[26];
-        ctime_s(timestamp, sizeof(timestamp), &now);
-        logFile << "[" << timestamp << "] " << message << std::endl;
+        logFile << fullMessage << std::endl;
     }
     logFile.close();
+
+    // Выводим в консоль
+    std::cout << fullMessage << std::endl;
 }
 
 // Функция для отправки сообщения типа "TestMessageServer"

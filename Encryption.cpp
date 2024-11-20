@@ -2,6 +2,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <openssl/evp.h>
+#include <openssl/err.h>
 
 Encryption::Encryption() {
     printf("[Encryption] Initializing key...\n");
@@ -19,14 +20,18 @@ void Encryption::InitializeKey() {
     // Пример генерации ключа
     const char* defaultKey = "default_key_1234";  // Используйте ваш ключ или способ его получения
     printf("[Encryption] Initializing key with: %s\n", defaultKey);
+
+    // Инициализируем ключ из строки (можно заменить на более безопасную генерацию)
     for (int i = 0; i < AES_BLOCK_SIZE; i++) {
         Key[i] = defaultKey[i];
     }
+
     printf("[Encryption] Key initialized.\n");
 }
 
 void Encryption::ClearKey() {
     printf("[Encryption] Clearing key values...\n");
+    // Обнуляем ключ для безопасности
     for (int i = 0; i < AES_BLOCK_SIZE; i++) {
         Key[i] = 0;
     }
@@ -35,6 +40,7 @@ void Encryption::ClearKey() {
 
 void Encryption::EncryptBytes(const unsigned char* input, unsigned int inputLen, unsigned char* output, unsigned int& outputLen) {
     printf("[Encryption] Starting encryption...\n");
+
     EVP_CIPHER_CTX* ctx = EVP_CIPHER_CTX_new();
     if (ctx == NULL) {
         printf("[Encryption] Failed to create EVP context.\n");
@@ -61,6 +67,7 @@ void Encryption::EncryptBytes(const unsigned char* input, unsigned int inputLen,
     outputLen += len;
     printf("[Encryption] Encryption update complete. Bytes encrypted: %d\n", len);
 
+    // Завершаем шифрование
     printf("[Encryption] Finalizing encryption...\n");
     if (1 != EVP_EncryptFinal_ex(ctx, output + outputLen, &len)) {
         printf("[Encryption] Encryption finalization failed.\n");
@@ -76,6 +83,7 @@ void Encryption::EncryptBytes(const unsigned char* input, unsigned int inputLen,
 
 void Encryption::DecryptBytes(const unsigned char* input, unsigned int inputLen, unsigned char* output, unsigned int& outputLen) {
     printf("[Encryption] Starting decryption...\n");
+
     EVP_CIPHER_CTX* ctx = EVP_CIPHER_CTX_new();
     if (ctx == NULL) {
         printf("[Encryption] Failed to create EVP context.\n");
@@ -85,7 +93,9 @@ void Encryption::DecryptBytes(const unsigned char* input, unsigned int inputLen,
     // Инициализация дешифрования
     printf("[Encryption] Initializing decryption...\n");
     if (1 != EVP_DecryptInit_ex(ctx, EVP_aes_128_ecb(), NULL, Key, NULL)) {
-        printf("[Encryption] Decryption initialization failed.\n");
+        unsigned long err = ERR_get_error();
+        printf("[Encryption] Decryption initialization failed. OpenSSL Error code: %lu\n", err);
+        ERR_print_errors_fp(stderr);
         EVP_CIPHER_CTX_free(ctx);
         return;
     }
@@ -93,17 +103,25 @@ void Encryption::DecryptBytes(const unsigned char* input, unsigned int inputLen,
 
     int len;
     outputLen = 0;
+
+    // Дешифрование данных
     printf("[Encryption] Decrypting data...\n");
     if (1 != EVP_DecryptUpdate(ctx, output, &len, input, inputLen)) {
-        printf("[Encryption] Decryption update failed.\n");
+        unsigned long err = ERR_get_error();
+        printf("[Encryption] Decryption update failed. OpenSSL Error code: %lu\n", err);
+        ERR_print_errors_fp(stderr);
         EVP_CIPHER_CTX_free(ctx);
         return;
     }
     outputLen += len;
     printf("[Encryption] Decryption update complete. Bytes decrypted: %d\n", len);
 
+    // Завершение дешифрования с обработкой паддинга
     printf("[Encryption] Finalizing decryption...\n");
     if (1 != EVP_DecryptFinal_ex(ctx, output + outputLen, &len)) {
+        unsigned long err = ERR_get_error();
+        
+        ERR_print_errors_fp(stderr);
         EVP_CIPHER_CTX_free(ctx);
         return;
     }

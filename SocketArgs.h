@@ -2,7 +2,7 @@
 #define SOCKETARGS_HPP
 
 #include <vector>
-#include <string>
+#include <cstdint> // для uint8_t
 
 class SocketArgs {
 public:
@@ -10,9 +10,9 @@ public:
     void SetBuffer(const std::vector<uint8_t>& buffer);
     bool IsInUse = false;
 
-
 private:
     size_t bufferSize;
+    std::vector<uint8_t> buffer; // Буфер данных
 };
 
-#endif
+#endif // SOCKETARGS_HPP

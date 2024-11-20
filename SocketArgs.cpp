@@ -1,12 +1,10 @@
-#ifndef UTILITIES_HPP
-#define UTILITIES_HPP
+#include "SocketArgs.h"
 
-#include <string>
-#include <vector>
+SocketArgs::SocketArgs(size_t bufferSize)
+    : bufferSize(bufferSize), buffer(bufferSize) { }
 
-class Utilities {
-public:
-    //static std::vector<std::string> SplitJSON(const std::string& input);
-};
-
-#endif
+void SocketArgs::SetBuffer(const std::vector<uint8_t>& buffer) {
+    if (buffer.size() <= bufferSize) {
+        this->buffer = buffer; // Устанавливаем буфер
+    }
+}

@@ -130,6 +130,7 @@
     <ClCompile Include="Encryption.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="SocketArgs.cpp" />
+    <ClCompile Include="SocketArgsPool.cpp" />
     <ClCompile Include="SocketMessageHandler.cpp" />
     <ClCompile Include="Utilities.cpp" />
   </ItemGroup>
@@ -137,6 +138,7 @@
     <ClInclude Include="Config.h" />
     <ClInclude Include="Encryption.h" />
     <ClInclude Include="SocketArgs.h" />
+    <ClInclude Include="SocketArgsPool.h" />
     <ClInclude Include="SocketMessageHandler.h" />
     <ClInclude Include="Utilities.h" />
   </ItemGroup>

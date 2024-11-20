@@ -1,63 +1,93 @@
 #include "Encryption.h"
-#include <cstring>
+#include <string.h>
 #include <iostream>
-#include <random>
+#include <openssl/evp.h>
 
 Encryption::Encryption() {
     InitializeKey();
 }
 
 Encryption::~Encryption() {
-    // Очистка ключа
-    std::memset(Key, 0, AES_BLOCK_SIZE);
+    ClearKey();
 }
 
 void Encryption::InitializeKey() {
     // Пример генерации ключа
     const char* defaultKey = "default_key_1234";  // Используйте ваш ключ или способ его получения
-    std::memcpy(Key, defaultKey, AES_BLOCK_SIZE);
-}
-
-void Encryption::AES_EncryptBlock(const unsigned char* input, unsigned char* output) {
-    // Простой пример шифрования в режиме ECB (без использования внешних библиотек)
-    for (int i = 0; i < AES_BLOCK_SIZE; ++i) {
-        output[i] = input[i] ^ Key[i % AES_BLOCK_SIZE]; // Пример простой операции XOR
+    for (int i = 0; i < AES_BLOCK_SIZE; i++) {
+        Key[i] = defaultKey[i];
     }
 }
 
-void Encryption::AES_DecryptBlock(const unsigned char* input, unsigned char* output) {
-    // Простой пример дешифрования в режиме ECB
-    for (int i = 0; i < AES_BLOCK_SIZE; ++i) {
-        output[i] = input[i] ^ Key[i % AES_BLOCK_SIZE]; // Пример симметричного дешифрования с использованием XOR
+void Encryption::ClearKey() {
+    for (int i = 0; i < AES_BLOCK_SIZE; i++) {
+        Key[i] = 0;
     }
 }
 
 void Encryption::EncryptBytes(const unsigned char* input, unsigned int inputLen, unsigned char* output, unsigned int& outputLen) {
-    unsigned char iv[AES_BLOCK_SIZE] = { 0 };  // IV можно использовать случайным образом
-    unsigned int blockCount = (inputLen / AES_BLOCK_SIZE) + (inputLen % AES_BLOCK_SIZE == 0 ? 0 : 1);
-
-    unsigned int outputIndex = 0;
-    for (unsigned int i = 0; i < blockCount; ++i) {
-        // Дополняем последние данные, если нужно
-        unsigned int blockSize = (i == blockCount - 1 && inputLen % AES_BLOCK_SIZE != 0) ? inputLen % AES_BLOCK_SIZE : AES_BLOCK_SIZE;
-        unsigned char block[AES_BLOCK_SIZE] = { 0 };
-        std::memcpy(block, input + i * AES_BLOCK_SIZE, blockSize);
-
-        AES_EncryptBlock(block, output + outputIndex);  // Шифруем блок
-        outputIndex += AES_BLOCK_SIZE;
+    EVP_CIPHER_CTX* ctx = EVP_CIPHER_CTX_new();
+    if (ctx == NULL) {
+        // Вывод ошибки с использованием стандартных функций C
+        printf("Failed to create EVP context.\n");
+        return;
     }
 
-    outputLen = outputIndex;
+    // Инициализация шифрования
+    if (1 != EVP_EncryptInit_ex(ctx, EVP_aes_128_ecb(), NULL, Key, NULL)) {
+        printf("Encryption initialization failed.\n");
+        EVP_CIPHER_CTX_free(ctx);
+        return;
+    }
+
+    int len;
+    outputLen = 0;
+    if (1 != EVP_EncryptUpdate(ctx, output, &len, input, inputLen)) {
+        printf("Encryption update failed.\n");
+        EVP_CIPHER_CTX_free(ctx);
+        return;
+    }
+    outputLen += len;
+
+    if (1 != EVP_EncryptFinal_ex(ctx, output + outputLen, &len)) {
+        printf("Encryption finalization failed.\n");
+        EVP_CIPHER_CTX_free(ctx);
+        return;
+    }
+    outputLen += len;
+
+    EVP_CIPHER_CTX_free(ctx);
 }
 
 void Encryption::DecryptBytes(const unsigned char* input, unsigned int inputLen, unsigned char* output, unsigned int& outputLen) {
-    unsigned int blockCount = inputLen / AES_BLOCK_SIZE;
-
-    unsigned int outputIndex = 0;
-    for (unsigned int i = 0; i < blockCount; ++i) {
-        AES_DecryptBlock(input + i * AES_BLOCK_SIZE, output + outputIndex);  // Дешифруем блок
-        outputIndex += AES_BLOCK_SIZE;
+    EVP_CIPHER_CTX* ctx = EVP_CIPHER_CTX_new();
+    if (ctx == NULL) {
+        printf("Failed to create EVP context.\n");
+        return;
     }
 
-    outputLen = outputIndex;
+    // Инициализация дешифрования
+    if (1 != EVP_DecryptInit_ex(ctx, EVP_aes_128_ecb(), NULL, Key, NULL)) {
+        printf("Decryption initialization failed.\n");
+        EVP_CIPHER_CTX_free(ctx);
+        return;
+    }
+
+    int len;
+    outputLen = 0;
+    if (1 != EVP_DecryptUpdate(ctx, output, &len, input, inputLen)) {
+        printf("Decryption update failed.\n");
+        EVP_CIPHER_CTX_free(ctx);
+        return;
+    }
+    outputLen += len;
+
+    if (1 != EVP_DecryptFinal_ex(ctx, output + outputLen, &len)) {
+        printf("Decryption finalization failed.\n");
+        EVP_CIPHER_CTX_free(ctx);
+        return;
+    }
+    outputLen += len;
+
+    EVP_CIPHER_CTX_free(ctx);
 }

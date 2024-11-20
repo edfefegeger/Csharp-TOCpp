@@ -15,6 +15,8 @@ private:
     unsigned char Key[AES_BLOCK_SIZE];
 
     void InitializeKey();
+    void AES_EncryptBlock(const unsigned char* input, unsigned char* output);
+    void AES_DecryptBlock(const unsigned char* input, unsigned char* output);
 };
 
 #endif // ENCRYPTION_H

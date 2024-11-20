@@ -114,6 +114,20 @@ int main() {
     SendTestMessage(handler, "Hello, this is a test message!");
     LogMessage("TestMessageServer sent successfully");
 
+    // Чтение входящих данных с сокета и обработка их с помощью ProcessSocketArgs
+    char recvBuffer[1024];
+    int recvResult = recv(clientSocket, recvBuffer, sizeof(recvBuffer), 0);
+    if (recvResult > 0) {
+        // Вызов ProcessSocketArgs для дешифровки и обработки полученного сообщения
+        handler.ProcessSocketArgs(recvBuffer, recvResult);
+    }
+    else if (recvResult == 0) {
+        LogMessage("Connection closed by server");
+    }
+    else {
+        PrintErrorMessage("Receive failed");
+    }
+
     closesocket(clientSocket);
     LogMessage("Socket closed successfully");
     WSACleanup();

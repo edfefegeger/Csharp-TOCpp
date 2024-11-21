@@ -1,46 +1,61 @@
 #include "SocketArgsPool.h"
-#include <mutex>
-#include <algorithm> // Для поиска
 
-// Определяем статические переменные вне класса
-std::vector<SocketArgs> SocketArgsPool::SocketReceiveArgs;
-std::vector<SocketArgs> SocketArgsPool::SocketSendArgs;
+// Определение статических переменных
+SocketArgs SocketArgsPool::SocketReceiveArgs[SocketArgsPool::MaxArgs] = { SocketArgs(1024) };
+SocketArgs SocketArgsPool::SocketSendArgs[SocketArgsPool::MaxArgs] = { SocketArgs(1024) };
+size_t SocketArgsPool::ReceiveArgsCount = 0;
+size_t SocketArgsPool::SendArgsCount = 0;
+volatile bool SocketArgsPool::isLocked = false;
 
-std::mutex receiveMutex;
-std::mutex sendMutex;
+void SocketArgsPool::Lock() {
+    while (isLocked); // Ждем, пока блокировка освободится
+    isLocked = true;
+}
+
+void SocketArgsPool::Unlock() {
+    isLocked = false;
+}
 
 SocketArgs* SocketArgsPool::GetReceiveArg() {
-    receiveMutex.lock();
-    for (auto& arg : SocketReceiveArgs) {
-        if (!arg.IsInUse) {
-            arg.IsInUse = true;
-            receiveMutex.unlock();
-            return &arg;
+    Lock();
+
+    for (size_t i = 0; i < ReceiveArgsCount; ++i) {
+        if (!SocketReceiveArgs[i].IsInUse) {
+            SocketReceiveArgs[i].IsInUse = true;
+            Unlock();
+            return &SocketReceiveArgs[i];
         }
     }
 
-    // Если свободных аргументов нет, создаем новый
-    SocketArgs newArg(1024); // Пример размера буфера
-    newArg.IsInUse = true;
-    SocketReceiveArgs.push_back(newArg);
-    receiveMutex.unlock();
-    return &SocketReceiveArgs.back();
+    if (ReceiveArgsCount < MaxArgs) {
+        SocketReceiveArgs[ReceiveArgsCount] = SocketArgs(1024);
+        SocketReceiveArgs[ReceiveArgsCount].IsInUse = true;
+        Unlock();
+        return &SocketReceiveArgs[ReceiveArgsCount++];
+    }
+
+    Unlock();
+    return nullptr;
 }
 
 SocketArgs* SocketArgsPool::GetSendArg() {
-    sendMutex.lock();
-    for (auto& arg : SocketSendArgs) {
-        if (!arg.IsInUse) {
-            arg.IsInUse = true;
-            sendMutex.unlock();
-            return &arg;
+    Lock();
+
+    for (size_t i = 0; i < SendArgsCount; ++i) {
+        if (!SocketSendArgs[i].IsInUse) {
+            SocketSendArgs[i].IsInUse = true;
+            Unlock();
+            return &SocketSendArgs[i];
         }
     }
 
-    // Если свободных аргументов нет, создаем новый
-    SocketArgs newArg(1024); // Пример размера буфера
-    newArg.IsInUse = true;
-    SocketSendArgs.push_back(newArg);
-    sendMutex.unlock();
-    return &SocketSendArgs.back();
+    if (SendArgsCount < MaxArgs) {
+        SocketSendArgs[SendArgsCount] = SocketArgs(1024);
+        SocketSendArgs[SendArgsCount].IsInUse = true;
+        Unlock();
+        return &SocketSendArgs[SendArgsCount++];
+    }
+
+    Unlock();
+    return nullptr;
 }

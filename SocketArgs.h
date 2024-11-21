@@ -1,18 +1,20 @@
-#ifndef SOCKETARGS_HPP
-#define SOCKETARGS_HPP
+#ifndef SOCKETARGS_H
+#define SOCKETARGS_H
 
-#include <vector>
-#include <cstdint> // для uint8_t
+#include <cstddef> // Для size_t
+#include <cstdint> // Для uint8_t
 
 class SocketArgs {
 public:
+    SocketArgs(); // Конструктор по умолчанию
     SocketArgs(size_t bufferSize);
-    void SetBuffer(const std::vector<uint8_t>& buffer);
+    ~SocketArgs();
+    void SetBuffer(const uint8_t* buffer, size_t size);
     bool IsInUse = false;
 
 private:
-    size_t bufferSize;
-    std::vector<uint8_t> buffer; // Буфер данных
+    size_t bufferSize = 0;
+    uint8_t* buffer = nullptr; // Инициализация указателя
 };
 
 #endif // SOCKETARGS_HPP

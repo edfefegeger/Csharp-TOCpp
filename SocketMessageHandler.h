@@ -2,12 +2,9 @@
 #define SOCKETMESSAGEHANDLER_H
 
 #include "Encryption.h"
-#include <winsock2.h>  // Для работы с сокетами в Windows
-#include <ws2tcpip.h>  // Для дополнительных функций (например, inet_pton)
-
-// Подключение библиотеки для сокетов
+#include <winsock2.h>  
+#include <ws2tcpip.h>  
 #pragma comment(lib, "Ws2_32.lib")
-
 class SocketMessageHandler {
 public:
     explicit SocketMessageHandler(int socketFd);
@@ -17,10 +14,10 @@ public:
     void ProcessSocketArgs(const char* buffer, unsigned int length);
 
 private:
-    int socketFd;       // Дескриптор сокета
+    int socketFd;       
     Encryption encryptor;
 
     void ProcessMessage(const char* message, unsigned int length);
 };
 
-#endif // SOCKETMESSAGEHANDLER_H
+#endif 

@@ -5,4 +5,4 @@ struct Participant {
     char ID[128];
 };
 
-#endif // PARTICIPANT_H
+#endif 

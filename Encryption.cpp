@@ -17,11 +17,10 @@ Encryption::~Encryption() {
 }
 
 void Encryption::InitializeKey() {
-    // Пример генерации ключа
-    const char* defaultKey = "default_key_1234";  // Используйте ваш ключ или способ его получения
+    const char* defaultKey = "default_key_1234";  
     printf("[Encryption] Initializing key with: %s\n", defaultKey);
 
-    // Инициализируем ключ из строки (можно заменить на более безопасную генерацию)
+
     for (int i = 0; i < AES_BLOCK_SIZE; i++) {
         Key[i] = defaultKey[i];
     }
@@ -31,7 +30,7 @@ void Encryption::InitializeKey() {
 
 void Encryption::ClearKey() {
     printf("[Encryption] Clearing key values...\n");
-    // Обнуляем ключ для безопасности
+
     for (int i = 0; i < AES_BLOCK_SIZE; i++) {
         Key[i] = 0;
     }
@@ -47,7 +46,7 @@ void Encryption::EncryptBytes(const unsigned char* input, unsigned int inputLen,
         return;
     }
 
-    // Инициализация шифрования
+
     printf("[Encryption] Initializing encryption...\n");
     if (1 != EVP_EncryptInit_ex(ctx, EVP_aes_128_ecb(), NULL, Key, NULL)) {
         printf("[Encryption] Encryption initialization failed.\n");
@@ -67,7 +66,7 @@ void Encryption::EncryptBytes(const unsigned char* input, unsigned int inputLen,
     outputLen += len;
     printf("[Encryption] Encryption update complete. Bytes encrypted: %d\n", len);
 
-    // Завершаем шифрование
+
     printf("[Encryption] Finalizing encryption...\n");
     if (1 != EVP_EncryptFinal_ex(ctx, output + outputLen, &len)) {
         printf("[Encryption] Encryption finalization failed.\n");
@@ -90,7 +89,7 @@ void Encryption::DecryptBytes(const unsigned char* input, unsigned int inputLen,
         return;
     }
 
-    // Инициализация дешифрования
+
     printf("[Encryption] Initializing decryption...\n");
     if (1 != EVP_DecryptInit_ex(ctx, EVP_aes_128_ecb(), NULL, Key, NULL)) {
         unsigned long err = ERR_get_error();
@@ -104,7 +103,7 @@ void Encryption::DecryptBytes(const unsigned char* input, unsigned int inputLen,
     int len;
     outputLen = 0;
 
-    // Дешифрование данных
+
     printf("[Encryption] Decrypting data...\n");
     if (1 != EVP_DecryptUpdate(ctx, output, &len, input, inputLen)) {
         unsigned long err = ERR_get_error();
@@ -116,7 +115,7 @@ void Encryption::DecryptBytes(const unsigned char* input, unsigned int inputLen,
     outputLen += len;
     printf("[Encryption] Decryption update complete. Bytes decrypted: %d\n", len);
 
-    // Завершение дешифрования с обработкой паддинга
+
     printf("[Encryption] Finalizing decryption...\n");
     if (1 != EVP_DecryptFinal_ex(ctx, output + outputLen, &len)) {
         unsigned long err = ERR_get_error();

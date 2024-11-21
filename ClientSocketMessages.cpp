@@ -2,7 +2,7 @@
 #include "ClientSocketMessages.h"
 #include <cstring>
 #include <ctime>
-#include <cstdio> // Äëÿ sprintf_s è snprintf
+#include <cstdio>
 
 ClientSocketMessages::ClientSocketMessages(SOCKET socketOut) : socketOut(socketOut) {}
 

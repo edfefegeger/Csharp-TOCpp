@@ -1,10 +1,10 @@
 #include "Utilities.h"
-#include <cstring> // Для работы с C-строками
+#include <cstring> 
 
 char** Utilities::SplitJSON(const char* input, unsigned int& messageCount) {
     messageCount = 0;
-    unsigned int maxMessages = 10; // Ограничение на количество сообщений
-    char** messages = new char* [maxMessages]; // Динамический массив указателей на строки
+    unsigned int maxMessages = 10; 
+    char** messages = new char* [maxMessages]; 
 
     size_t startObject = 0, open = 0, close = 0;
     bool withinString = false;
@@ -23,15 +23,11 @@ char** Utilities::SplitJSON(const char* input, unsigned int& messageCount) {
         }
 
         if (open > 0 && open == close) {
-            // Выделяем память для строки и копируем подстроку с использованием strncpy_s
             size_t messageLength = i - startObject + 1;
             messages[messageCount] = new char[messageLength + 1];
             strncpy_s(messages[messageCount], messageLength + 1, input + startObject, messageLength);
-            messages[messageCount][messageLength] = '\0'; // Завершаем строку нулевым символом
-
+            messages[messageCount][messageLength] = '\0'; 
             ++messageCount;
-
-            // Если достигнут предел сообщений, увеличиваем его
             if (messageCount >= maxMessages) {
                 maxMessages *= 2;
                 char** newMessages = new char* [maxMessages];
@@ -49,7 +45,6 @@ char** Utilities::SplitJSON(const char* input, unsigned int& messageCount) {
     return messages;
 }
 
-// Освобождаем память для сообщений
 void Utilities::FreeMessages(char** messages, unsigned int messageCount) {
     for (unsigned int i = 0; i < messageCount; ++i) {
         delete[] messages[i];

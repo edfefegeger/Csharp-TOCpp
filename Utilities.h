@@ -7,4 +7,4 @@ public:
     static void FreeMessages(char** messages, unsigned int messageCount);
 };
 
-#endif // UTILITIES_H
+#endif 

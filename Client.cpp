@@ -1,9 +1,9 @@
 #include "Client.h"
 #include <winsock2.h>
 #include <cstring>
-#include <ws2tcpip.h> // Для inet_pton
+#include <ws2tcpip.h> 
 
-// Убираем std::vector, заменяем на массив фиксированного размера
+
 Participant Client::ParticipantList[MAX_PARTICIPANTS];
 int Client::ParticipantCount = 0;
 
@@ -23,7 +23,7 @@ void Client::Connect(const char* host, int port) {
     serverAddr.sin_family = AF_INET;
     serverAddr.sin_port = htons(port);
 
-    // Используем inet_pton вместо inet_addr
+
     if (inet_pton(AF_INET, host, &serverAddr.sin_addr) <= 0) {
         closesocket(TcpClient);
         return;
@@ -47,7 +47,7 @@ void Client::WaitForServerMessage() {
         }
 
         buffer[bytesRead] = '\0';
-        // Обработка сообщений
+
     }
 }
 
@@ -61,7 +61,6 @@ bool Client::AddParticipant(const Participant& participant) {
 bool Client::RemoveParticipant(const char* id) {
     for (int i = 0; i < ParticipantCount; ++i) {
         if (strcmp(ParticipantList[i].ID, id) == 0) {
-            // Смещаем оставшихся участников
             for (int j = i; j < ParticipantCount - 1; ++j) {
                 ParticipantList[j] = ParticipantList[j + 1];
             }

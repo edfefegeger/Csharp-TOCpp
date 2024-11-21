@@ -1,17 +1,15 @@
 #include "SocketMessageHandler.h"
-#include <winsock2.h> // Windows Sockets API
-#include <ws2tcpip.h> // Дополнительные функции для работы с адресами
+#include <winsock2.h> 
+#include <ws2tcpip.h> 
 #include <cstring>
-#include <windows.h> // Для работы с выводом в консоль
-#include <cstdio>    // Для sprintf_s
-
-// Подключение библиотеки для Windows Sockets API
+#include <windows.h> 
+#include <cstdio>    
 #pragma comment(lib, "Ws2_32.lib")
 
 SocketMessageHandler::SocketMessageHandler(int socketFd) : socketFd(socketFd) {}
 
 SocketMessageHandler::~SocketMessageHandler() {
-    closesocket(socketFd); // Закрываем сокет
+    closesocket(socketFd); 
 }
 
 void SocketMessageHandler::SendJSON(const char* jsonData) {
@@ -24,7 +22,6 @@ void SocketMessageHandler::SendJSON(const char* jsonData) {
     int result = send(socketFd, (const char*)encrypted, encryptedLen, 0);
     if (result == SOCKET_ERROR) {
         char errorMsg[256];
-        // Используем sprintf_s для безопасного формирования строки
         sprintf_s(errorMsg, sizeof(errorMsg), "Error sending data: %ld\n", WSAGetLastError());
         WriteConsole(GetStdHandle(STD_ERROR_HANDLE), errorMsg, (DWORD)strlen(errorMsg), nullptr, nullptr);
     }
@@ -40,6 +37,5 @@ void SocketMessageHandler::ProcessSocketArgs(const char* buffer, unsigned int le
 }
 
 void SocketMessageHandler::ProcessMessage(const char* message, unsigned int length) {
-    // Простой вывод сообщения в консоль без использования std::cout
     WriteConsole(GetStdHandle(STD_OUTPUT_HANDLE), message, (DWORD)length, nullptr, nullptr);
 }

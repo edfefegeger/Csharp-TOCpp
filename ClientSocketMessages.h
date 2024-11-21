@@ -14,4 +14,4 @@ public:
     void SendPing();
 };
 
-#endif // CLIENTSOCKETMESSAGES_H
+#endif 

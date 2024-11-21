@@ -6,30 +6,30 @@
 
 class Capturer {
 public:
-    bool IsCapturing;                  // Флаг, указывающий, идет ли захват
-    int PauseForMilliseconds;          // Время паузы в миллисекундах
+    bool IsCapturing;               
+    int PauseForMilliseconds;      
 
-    Capturer();                        // Конструктор
-    ~Capturer();                       // Деструктор
+    Capturer();                      
+    ~Capturer();                   
 
-    void BeginCapturing(               // Начать захват
+    void BeginCapturing(          
         const char* participantID,
         ClientSocketMessages& socketHandler,
         bool (*isConnected)(),
         bool (*participantExists)(const char*)
     );
 
-    void StopCapturing();              // Остановить захват
+    void StopCapturing();          
 
 private:
-    const char* participantID;         // ID участника
-    ClientSocketMessages* socketHandler;  // Указатель на обработчик сообщений сокета
-    bool (*isConnectedFunc)();         // Указатель на функцию проверки соединения
-    bool (*participantExistsFunc)(const char*); // Указатель на функцию проверки участника
+    const char* participantID;
+    ClientSocketMessages* socketHandler; 
+    bool (*isConnectedFunc)();       
+    bool (*participantExistsFunc)(const char*); 
 
-    HANDLE captureThreadHandle;        // Дескриптор потока
+    HANDLE captureThreadHandle;
 
-    static DWORD WINAPI CaptureThreadProc(LPVOID param); // Функция для потока
+    static DWORD WINAPI CaptureThreadProc(LPVOID param);
 };
 
 #endif // CAPTURER_H

@@ -1,8 +1,8 @@
 #include "SocketArgs.h"
-#include <cstring> // Для memcpy
+#include <cstring> 
 
 SocketArgs::SocketArgs()
-    : bufferSize(0), buffer(nullptr) {} // Конструктор по умолчанию
+    : bufferSize(0), buffer(nullptr) {} 
 
 SocketArgs::SocketArgs(size_t bufferSize)
     : bufferSize(bufferSize), buffer(new uint8_t[bufferSize]) {}

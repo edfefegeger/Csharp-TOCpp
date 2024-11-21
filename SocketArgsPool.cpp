@@ -1,6 +1,5 @@
 #include "SocketArgsPool.h"
 
-// Определение статических переменных
 SocketArgs SocketArgsPool::SocketReceiveArgs[SocketArgsPool::MaxArgs] = { SocketArgs(1024) };
 SocketArgs SocketArgsPool::SocketSendArgs[SocketArgsPool::MaxArgs] = { SocketArgs(1024) };
 size_t SocketArgsPool::ReceiveArgsCount = 0;
@@ -8,7 +7,7 @@ size_t SocketArgsPool::SendArgsCount = 0;
 volatile bool SocketArgsPool::isLocked = false;
 
 void SocketArgsPool::Lock() {
-    while (isLocked); // Ждем, пока блокировка освободится
+    while (isLocked); 
     isLocked = true;
 }
 

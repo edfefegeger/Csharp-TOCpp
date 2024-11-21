@@ -14,15 +14,15 @@ public:
     void DecryptBytes(const unsigned char* input, unsigned int inputLen, unsigned char* output, unsigned int& outputLen);
 
 private:
-    unsigned char Key[AES_BLOCK_SIZE];  // Ключ для шифрования
+    unsigned char Key[AES_BLOCK_SIZE]; 
 
-    AES_KEY encryptKey;                 // Структура ключа для шифрования
-    AES_KEY decryptKey;                 // Структура ключа для дешифрования
+    AES_KEY encryptKey;        
+    AES_KEY decryptKey;              
 
     void InitializeKey();
-    void ClearKey();                    // Добавлена функция очистки ключа
+    void ClearKey();        
     void AES_EncryptBlock(const unsigned char* input, unsigned char* output);
     void AES_DecryptBlock(const unsigned char* input, unsigned char* output);
 };
 
-#endif // ENCRYPTION_H
+#endif 

@@ -11,4 +11,4 @@ namespace OfficeHelper {
     }
 }
 
-#endif // CONNECTION_TYPES_H
+#endif

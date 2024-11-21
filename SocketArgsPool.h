@@ -9,7 +9,7 @@ public:
     static SocketArgs* GetSendArg();
 
 private:
-    static const size_t MaxArgs = 100; // ћаксимальное количество аргументов
+    static const size_t MaxArgs = 100; 
     static SocketArgs SocketReceiveArgs[MaxArgs];
     static SocketArgs SocketSendArgs[MaxArgs];
     static size_t ReceiveArgsCount;
@@ -20,4 +20,4 @@ private:
     static volatile bool isLocked;
 };
 
-#endif // SOCKETARGPOOL_HPP
+#endif 

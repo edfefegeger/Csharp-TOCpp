@@ -16,7 +16,7 @@ DWORD WINAPI Capturer::CaptureThreadProc(LPVOID param) {
             capturer->socketHandler->SendJSON(buffer); // Simulate sending bytes
         }
         catch (...) {
-            // Обработка исключений (если потребуется)
+            Sleep(600);
         }
         Sleep(600);
     }

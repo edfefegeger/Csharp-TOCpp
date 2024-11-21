@@ -1,6 +1,4 @@
-#define _CRT_SECURE_NO_WARNINGS
 #include "ClientSocketMessages.h"
-#include <cstring>
 #include <ctime>
 #include <cstdio>
 
@@ -11,18 +9,20 @@ void ClientSocketMessages::SendJSON(const char* json) {
 }
 
 void ClientSocketMessages::SendTestMessage(const char* message) {
-    char buffer[1024];
-    sprintf_s(buffer, sizeof(buffer), "{\"Type\": \"TestMessageServer\", \"Message\": \"%s\"}", message);
-    SendJSON(buffer);
+    const char* jsonTemplate = "{\"Type\": \"TestMessageServer\", \"Message\": \"%s\"}";
+    char jsonData[1024];
+    sprintf_s(jsonData, jsonTemplate, message);
+    SendJSON(jsonData);
 }
 
 void ClientSocketMessages::SendPing() {
-    char buffer[1024];
     time_t now = time(0);
-    struct tm localtm;
-    localtime_s(&localtm, &now);
-    char timeStr[128];
-    strftime(timeStr, sizeof(timeStr), "%Y-%m-%d %H:%M:%S", &localtm);
-    sprintf_s(buffer, sizeof(buffer), "{\"Type\": \"TestPing\", \"Date\": \"%s\"}", timeStr);
-    SendJSON(buffer);
+    char dateStr[26];
+
+    ctime_s(dateStr, sizeof(dateStr), &now);
+
+    const char* jsonTemplate = "{\"Type\": \"TestPing\", \"Date\": \"%s\"}";
+    char jsonData[1024];
+    sprintf_s(jsonData, jsonTemplate, dateStr);
+    SendJSON(jsonData);
 }

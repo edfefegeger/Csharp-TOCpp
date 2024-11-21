@@ -264,3 +264,21 @@
 [Thu Nov 21 16:46:35 2024] TestMessageServer sent successfully
 [Thu Nov 21 16:46:35 2024] Socket closed successfully
 [Thu Nov 21 16:46:35 2024] WinSock cleaned up
+[Thu Nov 21 18:25:31 2024] WinSock initialized successfully
+[Thu Nov 21 18:25:31 2024] Socket created successfully
+[Thu Nov 21 18:25:32 2024] Connected to server successfully
+[Thu Nov 21 18:25:32 2024] Sending Ping...
+[Thu Nov 21 18:25:32 2024] Ping sent successfully
+[Thu Nov 21 18:25:32 2024] Sending TestMessageServer...
+[Thu Nov 21 18:25:32 2024] TestMessageServer sent successfully
+[Thu Nov 21 18:25:32 2024] Socket closed successfully
+[Thu Nov 21 18:25:32 2024] WinSock cleaned up
+[Thu Nov 21 18:33:44 2024] WinSock initialized successfully
+[Thu Nov 21 18:33:44 2024] Socket created successfully
+[Thu Nov 21 18:33:44 2024] Connected to server successfully
+[Thu Nov 21 18:33:44 2024] Sending Ping...
+[Thu Nov 21 18:33:44 2024] Ping sent successfully
+[Thu Nov 21 18:33:44 2024] Sending TestMessageServer...
+[Thu Nov 21 18:33:44 2024] TestMessageServer sent successfully
+[Thu Nov 21 18:33:44 2024] Socket closed successfully
+[Thu Nov 21 18:33:44 2024] WinSock cleaned up

@@ -142,6 +142,7 @@
     <ClInclude Include="Client.h" />
     <ClInclude Include="ClientSocketMessages.h" />
     <ClInclude Include="Config.h" />
+    <ClInclude Include="ConnectionTypes.h" />
     <ClInclude Include="Encryption.h" />
     <ClInclude Include="Participant.h" />
     <ClInclude Include="SocketArgs.h" />

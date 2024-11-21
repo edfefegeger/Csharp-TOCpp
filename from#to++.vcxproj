@@ -127,6 +127,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Capturer.cpp" />
+    <ClCompile Include="Client.cpp" />
+    <ClCompile Include="ClientSocketMessages.cpp" />
     <ClCompile Include="Encryption.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="SocketArgs.cpp" />
@@ -135,8 +138,12 @@
     <ClCompile Include="Utilities.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Capturer.h" />
+    <ClInclude Include="Client.h" />
+    <ClInclude Include="ClientSocketMessages.h" />
     <ClInclude Include="Config.h" />
     <ClInclude Include="Encryption.h" />
+    <ClInclude Include="Participant.h" />
     <ClInclude Include="SocketArgs.h" />
     <ClInclude Include="SocketArgsPool.h" />
     <ClInclude Include="SocketMessageHandler.h" />
